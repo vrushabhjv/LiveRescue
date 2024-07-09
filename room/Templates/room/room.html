@@ -1,0 +1,117 @@
+{% extends "core/base.html" %}
+{% block title %}{{ room.name }}{% endblock %}
+{% block content %}
+
+<div class="p-10 lg:p-20 text-center">
+    <h1 class="text-3xl lg:text-6xl text-white">{{ room.name }}</h1>
+</div>
+
+<div class="lg:w-2/4 mx-4 lg:mx-auto p-4 bg-white rounded-xl">
+    <div class="chat-messages space-y-3" id="chat-messages">
+        {% for msg in chatmessages %}
+            <div class="p-4 bg-gray-200 rounded-xl">
+                <p class="font-semibold"> {{ msg.user.username}} </p>
+                <p> {{ msg.content }} </p>
+            </div>
+        {% endfor %}
+        {% comment %} Messages get added over here using javascript {% endcomment %}
+    </div>
+
+</div>
+
+{% comment %} Form for submitting the message {% endcomment %}
+<div class="lg:w-2/4 mt-6 mb-4 mx-4 lg:mx-auto p-4 bg-white rounded-xl">
+    <form method="post"action="." class="flex">
+        
+        <input type="text" class="flex-1 mr-3" placeholder="Your Message ..." id="chat-message-input">
+
+        <button class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700" id="chat-message-submit">
+            Submit
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+{% comment %}
+The below line of code is used to convert the value of the "room.slug" variable into a JSON string and assign it to a JavaScript variable called "json-roomname". 
+
+The "json_script" template filter is used to escape the value of "room.slug" and convert it into a JSON string. This is useful when you want to pass the value of a Django variable to JavaScript code.
+
+The resulting JSON string is then assigned to the "json-roomname" JavaScript variable, which can be accessed and used in JavaScript code within the same HTML file.
+
+Example usage:
+If the value of "room.slug" is "my-room", the resulting JavaScript code would be:
+<script>
+    var json-roomname = "my-room";
+</script>
+{% endcomment %}
+{{ room.slug | json_script:"json-roomname" }}
+
+{{ request.user.username | json_script:"json-username"}}
+    <script>
+        const roomName = JSON.parse(document.getElementById('json-roomname').textContent) 
+        const userName = JSON.parse(document.getElementById('json-username').textContent) 
+        {% comment %} TO convert JSON formatted string into a JavaScript Object. The textContent ensures that only the plain text content is parsed as JSON. {% endcomment %}
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/'
+            + roomName
+            +'/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            console.log('onmessage')
+
+            // To add the message and display it in the frontend
+            const data = JSON.parse(e.data)
+
+            if(data.message){
+                let html = '<div class="p-4 bg-gray-200 rounded-xl">';
+                    html+='<p class="font-semibold">'+ data.username +'</p>';
+                    html+='<p>'+data.message + '</p></div>';
+
+                document.querySelector('#chat-messages').innerHTML += html;
+                scrollToBottom(); //Scroll to bottom when a new message is sent
+            }
+            else{
+                alert("The message was empty!!")
+            }
+        }
+
+        chatSocket.onclose = function(e) {
+            console.log('onclose')
+        }
+
+        //
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            e.preventDefault(); // By calling 'e.preventDefault()', you're preventing the browser from sending the form data to the server and reloading the page, allowing you to handle the form submission in your own custom way using JavaScript.
+
+            // In summary, 'e.preventDefault()'and 'return false' are used to prevent the default form submission behavior (which would cause a page reload and potentially lead to the CSRF token error),  which is necessary to avoid the CSRF token error and to handle the message sending through the WebSocket connection instead of a traditional form submission.
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+
+            // When you call chatSocket.send() in the client-side JavaScript, the message is sent over the WebSocket connection to the server-side Django Channels ChatConsumer, where it is processed and then broadcast to the other clients in the same room group.
+            chatSocket.send(JSON.stringify({
+                'message':message,
+                'username':userName,
+                'room': roomName
+            }));
+
+            messageInputDom.value = '';
+
+            return false;
+        }
+
+        //To scroll the messages to the bottom
+        function scrollToBottom() {
+            const objDiv = document.querySelector("#chat-messages");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        }
+
+        scrollToBottom(); // Calling the function when application loads
+    </script>
+{% endblock %}
