@@ -3,6 +3,130 @@
 {% block content %}
 
 <div class="p-10 lg:p-20 text-center">
-    <h1 class="text-3xl lg:text-6xl text-white"> LiveRescue </h1>
+    <h1 class="text-3xl lg:text-6xl text-teal-600"> LiveRescue </h1>
 </div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-10 m-10">
+    <a href='{% url "create_room" %}' target="" class="p-4 sm:p-6 md:p-8 flex 
+    flex-col gap-4 rounded-lg border border-solid border-violet-700 text-center
+    group cursor-pointer hover:border-violet-400 duration-200" >
+        <div class="bg-cyan-100 grid place-items-center px-4 text-5xl
+        md:text-6xl -mt-10 sm:-mt-12 md:-mt-14 lg:-mt-16 mx-auto duratioin-200">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+
+        </div>
+        <h3 class="font-medium text-xl sm:text-2xl md:text-3xl">
+            Report Disaster
+        </h3>
+        <p>
+            Please use this feature any disaster that may require help from the community.
+        </p>
+        <div class=" flex justify-between gap-4 items-center">
+            <div class="mx-auto cursor-pointer rounded-md duration-200 relative
+            after:absolute after:top-0 after:h-0 after:right-full after:w-full after:h-full after:bg-violet-900 
+            after:duration-200 hover:after:translate-x-full after:z-[-1] overflow-hidden">
+                <p class="relative z-4 px-2 py-2 ">Go to &rarr;</p>
+            </div>
+        </div>
+
+    </a>
+    <a href='{% url "rooms" %}' target="" class="p-4 sm:p-6 md:p-8 flex 
+    flex-col gap-4 rounded-lg border border-solid border-violet-700 text-center
+    group cursor-pointer hover:border-violet-400 duration-200" >
+        <div class="bg-cyan-100 grid place-items-center px-4 text-5xl
+        md:text-6xl -mt-10 sm:-mt-12 md:-mt-14 lg:-mt-16 mx-auto duratioin-200">
+
+            <i class="fa fa-list-alt" aria-hidden="true"></i>
+        
+        </div>
+        <h3 class="font-medium text-xl sm:text-2xl md:text-3xl">
+            Disasters Recorded
+        </h3>
+        <p>
+            Please use this feature any disaster that may require help from the community.
+        </p>
+        <div class=" flex justify-between gap-4 items-center">
+            <div class="mx-auto cursor-pointer rounded-md duration-200 relative
+            after:absolute after:top-0 after:h-0 after:right-full after:w-full after:h-full after:bg-violet-900 
+            after:duration-200 hover:after:translate-x-full after:z-[-1] overflow-hidden">
+                <p class="relative z-4 px-2 py-2 ">Go to &rarr;</p>
+            </div>
+        </div>
+
+    </a>
+    <a href='/' target="" class="p-4 sm:p-6 md:p-8 flex 
+    flex-col gap-4 rounded-lg border border-solid border-violet-700 text-center
+    group cursor-pointer hover:border-violet-400 duration-200" >
+        <div class="bg-cyan-100 grid place-items-center px-4 text-5xl
+        md:text-6xl -mt-10 sm:-mt-12 md:-mt-14 lg:-mt-16 mx-auto duratioin-200">
+        <i class="fa fa-user-plus" aria-hidden="true"></i>
+
+        </div>
+        <h3 class="font-medium text-xl sm:text-2xl md:text-3xl">
+            Register Volunteer
+        </h3>
+        <p>
+            Please use this feature any disaster that may require help from the community.
+        </p>
+        <div class=" flex justify-between gap-4 items-center">
+            <div class="mx-auto cursor-pointer rounded-md duration-200 relative
+            after:absolute after:top-0 after:h-0 after:right-full after:w-full after:h-full after:bg-violet-900 
+            after:duration-200 hover:after:translate-x-full after:z-[-1] overflow-hidden">
+                <p class="relative z-4 px-2 py-2 ">Go to &rarr;</p>
+            </div>
+        </div>
+
+    </a>
+    <a href='/' target="" class="p-4 sm:p-6 md:p-8 flex 
+    flex-col gap-4 rounded-lg border border-solid border-violet-700 text-center
+    group cursor-pointer hover:border-violet-400 duration-200" >
+        <div class="bg-cyan-100 grid place-items-center px-4 text-5xl
+        md:text-6xl -mt-10 sm:-mt-12 md:-mt-14 lg:-mt-16 mx-auto duratioin-200">
+        <i class="fa fa-users" aria-hidden="true"></i>
+
+        </div>
+        <h3 class="font-medium text-xl sm:text-2xl md:text-3xl">
+            Find Help
+        </h3>
+        <p>
+            Please use this feature any disaster that may require help from the community.
+        </p>
+        <div class=" flex justify-between gap-4 items-center">
+            <div class="mx-auto cursor-pointer rounded-md duration-200 relative
+            after:absolute after:top-0 after:h-0 after:right-full after:w-full after:h-full after:bg-violet-900 
+            after:duration-200 hover:after:translate-x-full after:z-[-1] overflow-hidden">
+                <p class="relative z-4 px-2 py-2 ">Go to &rarr;</p>
+            </div>
+        </div>
+
+    </a>
+</div>
+
+{% comment %} <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-10">
+    <Step step={steps[0]}>
+        <p>
+            This store is a merchandizing store created with <strong class="text-violet-400">Next.js 
+            Commerce.js Stripe & Node.js + Express.js</strong> Commerce.js is a product CMS and 
+            Stripe is used for payment processing.
+        </p>
+
+    </Step>
+    <Step step={steps[1]}>
+        <p>
+            This store is a merchandizing store created with <strong class="text-violet-400">Next.js 
+            Commerce.js Stripe & Node.js + Express.js</strong> Commerce.js is a product CMS and 
+            Stripe is used for payment processing.
+        </p>
+
+    </Step>
+    <Step step={steps[2]}>
+        <p>
+            This store is a merchandizing store created with <strong class="text-violet-400">Next.js 
+            Commerce.js Stripe & Node.js + Express.js</strong> Commerce.js is a product CMS and 
+            Stripe is used for payment processing.
+        </p>
+
+    </Step>
+</div>
+{% endcomment %}
 {% endblock %}

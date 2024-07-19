@@ -19,6 +19,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
         print("Accepting connect requests")
         await self.accept() # accept the connection
+        
+        await self.send_user_count() #send the current user count to group
 
     async def disconnect(self, close_code): # disconnect the user
         print("Disconnecting from room")
@@ -28,6 +30,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         print(f"Disconnected from room : {self.room_group_name}")
+        
+        # Update the user count when a user disconnects
+        await self.send_user_count()
         
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -59,6 +64,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message':message,
             'username':username,
             'room':room,
+        }))
+    
+    async def send_user_count(self):
+        user_count = len(self.channel_layer.groups[self.room_group_name])
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'user_count',
+                'count': user_count
+            }
+        )
+    
+    async def user_count(self, event):
+        count = event['count']
+        print(f"User count updated: {count}")
+        
+        await self.send(text_data=json.dumps({
+            'user_count': count
         }))
         
     @sync_to_async
